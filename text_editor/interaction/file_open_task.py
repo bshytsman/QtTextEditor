@@ -22,20 +22,23 @@ class FileOpenTask:
         file_name, selected_filter = QFileDialog.getOpenFileName(
             parent=self.app_context.main_window,
             caption="",
-            directory=os.path.dirname(app_state.text_source_path),
+            directory=app_state.file_open_folder,
             filter=";;".join(self.filters),
             initialFilter=app_state.file_open_selected_filter,
             options=options)
 
         if file_name:
-            edit = self.app_context.main_window.plainTextEdit
-            app_state.text_source_path = file_name
+            app_state.file_open_folder = os.path.dirname(file_name)
             app_state.file_open_selected_filter = selected_filter
 
             try:
                 with open(file_name, 'tr') as src:
+                    edit = self.app_context.main_window.plainTextEdit
                     edit.setPlainText(src.read())
+
+                app_state.text_source_path = file_name
                 app_state.file_save_state = FileSaveState.NEVER_SAVED
+                self.app_context.main_window.display_file_name(app_state)
 
             except Exception as e:
                 msg = QMessageBox()
@@ -47,9 +50,4 @@ class FileOpenTask:
                 msg.setStandardButtons(QMessageBox.Ok)
                 msg.exec_()
 
-                edit.setPlainText("")
-                app_state.file_save_state = FileSaveState.NEW
-                app_state.text_source_path = os.path.dirname(app_state.text_source_path) + "/"
-
             state_master.save_app_state()
-            self.app_context.main_window.display_file_name(app_state)

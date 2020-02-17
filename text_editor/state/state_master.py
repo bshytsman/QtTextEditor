@@ -47,6 +47,7 @@ class StateMaster():
         if not self.app_state.valid:
             self.app_state = self.app_context.main_window.retrieve_window_state()
             self.app_state.text_source_path = ""
+            self.app_state.file_open_folder = ""
             self.app_state.file_open_selected_filter = ""
             self.state_persistence.save_state(self.app_state)
 

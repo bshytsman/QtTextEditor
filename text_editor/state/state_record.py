@@ -7,6 +7,7 @@ class StateRecord:
         self.main_Width = None
         self.main_Height = None
         self.text_source_path = None
+        self.file_open_folder = None
         self.file_open_selected_filter = None
         self.file_save_state = None
         self.valid = False
@@ -27,6 +28,7 @@ class StateRecord:
         self.append_int(self.main_Width)
         self.append_int(self.main_Height)
         self.append_string(self.text_source_path)
+        self.append_string(self.file_open_folder)
         self.append_string(self.file_open_selected_filter)
         return self.byte_dump
 
@@ -43,6 +45,7 @@ class StateRecord:
             self.main_Width = self.retrieve_int()
             self.main_Height = self.retrieve_int()
             self.text_source_path = self.retrieve_string()
+            self.file_open_folder = self.retrieve_string()
             self.file_open_selected_filter = self.retrieve_string()
         except IndexError:
             return
