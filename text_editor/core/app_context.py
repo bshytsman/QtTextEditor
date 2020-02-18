@@ -10,6 +10,7 @@ class AppContext:
         self.task_handler = TaskHandler(self)
         self.state_master = StateMaster(self)
         self.started = False
+        self.active_editing = False
 
     def start_(self):
         self.main_window.assign_signals()
@@ -18,6 +19,7 @@ class AppContext:
         self.state_master.load_text_file()
         self.state_master.start()
         self.started = True
+        self.active_editing = True
 
     def stop_(self):
         self.state_master.stop()

@@ -33,12 +33,16 @@ class FileOpenTask:
 
             try:
                 with open(file_name, 'tr') as src:
-                    edit = self.app_context.main_window.plainTextEdit
-                    edit.setPlainText(src.read())
+                    saved_content = src.read()
 
+                self.app_context.active_editing = False
+                edit = self.app_context.main_window.plainTextEdit
+                edit.setPlainText(saved_content)
                 app_state.text_source_path = file_name
                 app_state.file_save_state = FileSaveState.NEVER_SAVED
+                app_state.text_saved_content = saved_content
                 self.app_context.main_window.display_file_name(app_state)
+                self.app_context.active_editing = True
 
             except Exception as e:
                 msg = QMessageBox()

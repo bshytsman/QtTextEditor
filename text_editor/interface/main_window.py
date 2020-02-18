@@ -15,6 +15,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def assign_signals(self):
         self.actionOpen.triggered.connect(self.app_context.task_handler.file_open)
         self.actionNew_file.triggered.connect(self.app_context.task_handler.file_new)
+        self.plainTextEdit.textChanged.connect(self.app_context.state_master.text_changed)
         # self.pushButton.clicked.connect(self.app_context.test_worker.button_pressed)
         pass
 
@@ -41,8 +42,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.resize(state.main_Width, state.main_Height)
         self.rearrange_components()
 
-    def display_file_name(self, app_state):
-        file_name = app_state.text_source_path if app_state.file_save_state != FileSaveState.NEW else "[new]"
+    def display_file_name(self, app_state, is_changed = False):
+        file_name = "[new]"
+        if app_state.file_save_state != FileSaveState.NEW:
+            file_name = app_state.text_source_path
+            if is_changed:
+                file_name += "*"
+
         self.setWindowTitle(file_name)
 
     @pyqtSlot()

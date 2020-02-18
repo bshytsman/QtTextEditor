@@ -10,6 +10,7 @@ class StateRecord:
         self.file_open_folder = None
         self.file_open_selected_filter = None
         self.file_save_state = None
+        self.text_saved_content = None
         self.valid = False
         self.byte_dump = None
         self.index = 0

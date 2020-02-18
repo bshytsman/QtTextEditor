@@ -6,7 +6,7 @@ from text_editor.state.file_save_state import FileSaveState
 from text_editor.state.state_persistence import StatePersistence
 
 
-class StateMaster():
+class StateMaster:
     WAIT_TIME_MILLISECONDS = 100
 
     def __init__(self, app_context):
@@ -36,6 +36,12 @@ class StateMaster():
             self.reshape_count = 5
             self.resize_count = 2
 
+    def text_changed(self):
+        if self.app_context.active_editing:
+            if self.app_state.file_save_state != FileSaveState.NEW:
+                is_changed = self.app_state.text_saved_content != self.app_context.main_window.plainTextEdit.toPlainText()
+                self.app_context.main_window.display_file_name(self.app_state, is_changed)
+
     def load_app_state(self):
         self.app_state = self.state_persistence.read_state()
 
@@ -50,15 +56,18 @@ class StateMaster():
 
     def load_text_file(self):
         self.app_state.file_save_state = FileSaveState.NEW
+        self.app_state.text_saved_content = ""
 
         file_name = self.app_state.text_source_path
-
         if file_name != "":
             try:
                 with open(file_name, 'tr') as src:
-                    self.app_context.main_window.plainTextEdit.setPlainText(src.read())
+                    saved_content = src.read()
+                self.app_context.main_window.plainTextEdit.setPlainText(saved_content)
+                self.app_state.text_saved_content = saved_content
                 self.app_state.file_save_state = FileSaveState.NEVER_SAVED
-            except:
+
+            except IOError:
                 pass
 
         self.app_context.main_window.display_file_name(self.app_state)

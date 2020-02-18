@@ -9,7 +9,7 @@ from text_editor.util.file_utils import FileUtils
 class StatePersistence:
     FOLDER_STATE_NAME = ".text_editor_cfg"
     FILE_STATE_NAME = "app.state"
-    FILE_BUFFER_NAME = "app.buffer"
+    FILE_DEPOT_NAME = "app.depot"
 
     def __init__(self):
         self.root_path = FileUtils.get_app_root_path()
@@ -37,9 +37,10 @@ class StatePersistence:
         except Exception as e:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
-            msg.setText("Error while saving state:")
+            msg.setText("Error saving state:")
             msg.setInformativeText(self.file_state_path)
             msg.setWindowTitle("Saving state error")
             msg.setDetailedText(str(e))
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
+
