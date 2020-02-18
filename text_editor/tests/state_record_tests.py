@@ -14,8 +14,8 @@ class StateRecordTester(unittest.TestCase):
         self.state_rec.text_source_path = "/local/Users/dummy.txt"
         self.state_rec.file_open_folder = "/local/Users/"
         self.state_rec.file_open_selected_filter = "All Files (*.*)"
-        self.state_rec.text_depot_len = 112233
-        self.state_rec.text_depot_hash = 440012345
+        self.state_rec.text_depot_len = 47210232472137434826
+        self.state_rec.text_depot_hash = -7210232472137434826
         self.state_rec.valid = True
 
     def test_dump_valid_record(self):

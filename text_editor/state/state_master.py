@@ -45,7 +45,8 @@ class StateMaster:
         if self.app_context.active_editing:
             self.save_depot_count = 10
             if self.app_state.file_save_state != FileSaveState.NEW:
-                is_changed = self.app_state.text_saved_content != self.app_context.main_window.plainTextEdit.toPlainText()
+                is_changed = self.app_state.text_saved_content != \
+                             self.app_context.main_window.plainTextEdit.toPlainText()
                 self.app_context.main_window.display_file_name(self.app_state, is_changed)
 
     def load_app_state(self):
@@ -63,24 +64,28 @@ class StateMaster:
         self.app_context.main_window.apply_window_state(self.app_state)
 
     def load_text(self):
-        self.app_state.file_save_state = FileSaveState.NEW
-        self.app_state.text_saved_content = ""
+        text_depot, valid = self.load_app_depot()
 
         file_name = self.app_state.text_source_path
-        print("file_name", file_name)
+        self.app_state.text_saved_content = ""
 
-        if file_name != "":
+        if file_name == "":
+            self.app_state.file_save_state = FileSaveState.NEW
+            self.app_state.text_saved_content = ""
+        else:
+            self.app_state.file_save_state = FileSaveState.NEVER_SAVED
             try:
                 with open(file_name, 'tr') as src:
                     saved_content = src.read()
-                self.app_context.main_window.plainTextEdit.setPlainText(saved_content)
                 self.app_state.text_saved_content = saved_content
-                self.app_state.file_save_state = FileSaveState.NEVER_SAVED
+                if not valid:
+                    text_depot = saved_content
 
             except IOError:
                 pass
 
-        self.app_context.main_window.display_file_name(self.app_state)
+        self.app_context.main_window.plainTextEdit.setPlainText(text_depot)
+        self.app_context.main_window.display_file_name(self.app_state, text_depot != self.app_state.text_saved_content)
 
     def get_app_state(self):
         return self.app_state
@@ -91,9 +96,29 @@ class StateMaster:
     def save_app_depot(self):
         text_depot = self.app_context.main_window.plainTextEdit.toPlainText()
         self.app_state.text_depot_len = len(text_depot)
-        self.app_state.text_depot_hash = hash(text_depot)
+        self.app_state.text_depot_hash = self.hash_it(text_depot)
         self.state_persistence.save_depot(text_depot)
         self.state_persistence.save_state(self.app_state)
+
+    def load_app_depot(self):
+        text_depot = self.state_persistence.read_depot()
+        if text_depot is None:
+            return "", False
+
+        valid = len(text_depot) == self.app_state.text_depot_len
+        valid = valid and (self.hash_it(text_depot) == self.app_state.text_depot_hash)
+        if not valid:
+            text_depot = ""
+        return text_depot, valid
+
+    @staticmethod
+    def hash_it(obj):
+        str_value = str(obj)
+        int_value = 0
+        length = max(len(str_value), 100)
+        for index, char in enumerate(str_value):
+            int_value += ((index % length) + 1) * ord(char)
+        return int_value
 
     def job_exec(self):
         if self.reshape_count > 0:

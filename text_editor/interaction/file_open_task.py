@@ -17,6 +17,7 @@ class FileOpenTask:
     def do_open(self):
         state_master = self.app_context.state_master
         app_state = state_master.get_app_state()
+        success_flag = False
 
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
@@ -44,8 +45,12 @@ class FileOpenTask:
                 app_state.text_saved_content = saved_content
                 self.app_context.main_window.display_file_name(app_state)
                 self.app_context.active_editing = True
+                success_flag = True
 
             except Exception as e:
                 FileUtils.display_error_dialog("File open error:", file_name, "File Open", str(e))
 
-            state_master.save_app_state()
+            if success_flag:
+                state_master.save_app_depot()
+            else:
+                state_master.save_app_state()
