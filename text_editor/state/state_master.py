@@ -15,8 +15,9 @@ class StateMaster():
         self.app_state = None
         self.job = TimerJob(interval=timedelta(milliseconds=StateMaster.WAIT_TIME_MILLISECONDS), execute=self.job_exec)
         self.resize_signal = AppSignal()
+        self.resize_count = 0
+        self.reshape_count = 0
         self.save_state_count = 0
-        self.rearrange_count = 0
 
     def start(self):
         self.resize_signal.connect(self.app_context.main_window.rearrange_components)
@@ -28,18 +29,12 @@ class StateMaster():
 
     def window_moved(self):
         if self.app_context.started:
-            pos = self.app_context.main_window.pos()
-            self.app_state.main_X = pos.x()
-            self.app_state.main_Y = pos.y()
-            self.save_state_count = 5
+            self.reshape_count = 5
 
     def window_resized(self):
         if self.app_context.started:
-            size = self.app_context.main_window.size()
-            self.app_state.main_Width = size.width()
-            self.app_state.main_Height = size.height()
-            self.save_state_count = 5
-            self.rearrange_count = 2
+            self.reshape_count = 5
+            self.resize_count = 2
 
     def load_app_state(self):
         self.app_state = self.state_persistence.read_state()
@@ -75,13 +70,23 @@ class StateMaster():
         self.state_persistence.save_state(self.app_state)
 
     def job_exec(self):
+        if self.reshape_count > 0:
+            self.reshape_count -= 1
+            if self.reshape_count == 0 and (not self.app_context.main_window.isMaximized()):
+                pos = self.app_context.main_window.pos()
+                self.app_state.main_X = pos.x()
+                self.app_state.main_Y = pos.y()
+                size = self.app_context.main_window.size()
+                self.app_state.main_Width = size.width()
+                self.app_state.main_Height = size.height()
+                self.save_state_count = 2
+
+        if self.resize_count > 0:
+            self.resize_count -= 1
+            if self.resize_count == 0:
+                self.resize_signal.emit()
+
         if self.save_state_count > 0:
             self.save_state_count -= 1
             if self.save_state_count == 0:
-                if not self.app_context.main_window.isMaximized():
-                    self.state_persistence.save_state(self.app_state)
-
-        if self.rearrange_count > 0:
-            self.rearrange_count -= 1
-            if self.rearrange_count == 0:
-                self.resize_signal.emit()
+                self.state_persistence.save_state(self.app_state)
