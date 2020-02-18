@@ -14,6 +14,8 @@ class StateRecordTester(unittest.TestCase):
         self.state_rec.text_source_path = "/local/Users/dummy.txt"
         self.state_rec.file_open_folder = "/local/Users/"
         self.state_rec.file_open_selected_filter = "All Files (*.*)"
+        self.state_rec.text_depot_len = 112233
+        self.state_rec.text_depot_hash = 440012345
         self.state_rec.valid = True
 
     def test_dump_valid_record(self):
@@ -50,6 +52,8 @@ class StateRecordTester(unittest.TestCase):
         self.assertEqual(self.state_rec.text_source_path, state.text_source_path)
         self.assertEqual(self.state_rec.file_open_folder, state.file_open_folder)
         self.assertEqual(self.state_rec.file_open_selected_filter, state.file_open_selected_filter)
+        self.assertEqual(self.state_rec.text_depot_len, state.text_depot_len)
+        self.assertEqual(self.state_rec.text_depot_hash, state.text_depot_hash)
         self.assertEqual(self.state_rec.valid, True)
 
     def test_store_and_retrieve_negative_ints(self):
@@ -70,6 +74,8 @@ class StateRecordTester(unittest.TestCase):
         self.assertEqual(self.state_rec.text_source_path, state.text_source_path)
         self.assertEqual(self.state_rec.file_open_folder, state.file_open_folder)
         self.assertEqual(self.state_rec.file_open_selected_filter, state.file_open_selected_filter)
+        self.assertEqual(self.state_rec.text_depot_len, state.text_depot_len)
+        self.assertEqual(self.state_rec.text_depot_hash, state.text_depot_hash)
         self.assertEqual(self.state_rec.valid, True)
 
     def test_retrieve_from_none(self):

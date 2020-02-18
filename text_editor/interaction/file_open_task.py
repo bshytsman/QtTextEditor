@@ -1,8 +1,9 @@
 import os
 
-from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QFileDialog
 
 from text_editor.state.file_save_state import FileSaveState
+from text_editor.util.file_utils import FileUtils
 
 
 class FileOpenTask:
@@ -45,13 +46,6 @@ class FileOpenTask:
                 self.app_context.active_editing = True
 
             except Exception as e:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Information)
-                msg.setText("File open error:")
-                msg.setInformativeText(file_name)
-                msg.setWindowTitle("File open")
-                msg.setDetailedText(str(e))
-                msg.setStandardButtons(QMessageBox.Ok)
-                msg.exec_()
+                FileUtils.display_error_dialog("File open error:", file_name, "File Open", str(e))
 
             state_master.save_app_state()

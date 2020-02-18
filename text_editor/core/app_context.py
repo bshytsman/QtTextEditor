@@ -16,7 +16,7 @@ class AppContext:
         self.main_window.assign_signals()
         self.main_window.show()
         self.state_master.load_app_state()
-        self.state_master.load_text_file()
+        self.state_master.load_text()
         self.state_master.start()
         self.started = True
         self.active_editing = True

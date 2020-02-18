@@ -15,12 +15,17 @@ class StateMaster:
         self.app_state = None
         self.job = TimerJob(interval=timedelta(milliseconds=StateMaster.WAIT_TIME_MILLISECONDS), execute=self.job_exec)
         self.resize_signal = AppSignal()
+        self.save_state_signal = AppSignal()
+        self.save_depot_signal = AppSignal()
         self.resize_count = 0
         self.reshape_count = 0
+        self.save_depot_count = 0
         self.save_state_count = 0
 
     def start(self):
         self.resize_signal.connect(self.app_context.main_window.rearrange_components)
+        self.save_state_signal.connect(self.save_app_state)
+        self.save_depot_signal.connect(self.save_app_depot)
         self.job.start()
         self.job.enable()
 
@@ -38,6 +43,7 @@ class StateMaster:
 
     def text_changed(self):
         if self.app_context.active_editing:
+            self.save_depot_count = 10
             if self.app_state.file_save_state != FileSaveState.NEW:
                 is_changed = self.app_state.text_saved_content != self.app_context.main_window.plainTextEdit.toPlainText()
                 self.app_context.main_window.display_file_name(self.app_state, is_changed)
@@ -50,15 +56,19 @@ class StateMaster:
             self.app_state.text_source_path = ""
             self.app_state.file_open_folder = ""
             self.app_state.file_open_selected_filter = ""
+            self.app_state.text_depot_len = 0
+            self.app_state.text_depot_hash = 0
             self.state_persistence.save_state(self.app_state)
 
         self.app_context.main_window.apply_window_state(self.app_state)
 
-    def load_text_file(self):
+    def load_text(self):
         self.app_state.file_save_state = FileSaveState.NEW
         self.app_state.text_saved_content = ""
 
         file_name = self.app_state.text_source_path
+        print("file_name", file_name)
+
         if file_name != "":
             try:
                 with open(file_name, 'tr') as src:
@@ -76,6 +86,13 @@ class StateMaster:
         return self.app_state
 
     def save_app_state(self):
+        self.state_persistence.save_state(self.app_state)
+
+    def save_app_depot(self):
+        text_depot = self.app_context.main_window.plainTextEdit.toPlainText()
+        self.app_state.text_depot_len = len(text_depot)
+        self.app_state.text_depot_hash = hash(text_depot)
+        self.state_persistence.save_depot(text_depot)
         self.state_persistence.save_state(self.app_state)
 
     def job_exec(self):
@@ -98,4 +115,9 @@ class StateMaster:
         if self.save_state_count > 0:
             self.save_state_count -= 1
             if self.save_state_count == 0:
-                self.state_persistence.save_state(self.app_state)
+                self.save_state_signal.emit()
+
+        if self.save_depot_count > 0:
+            self.save_depot_count -= 1
+            if self.save_depot_count == 0:
+                self.save_depot_signal.emit()

@@ -9,6 +9,8 @@ class StateRecord:
         self.text_source_path = None
         self.file_open_folder = None
         self.file_open_selected_filter = None
+        self.text_depot_len = None
+        self.text_depot_hash = None
         self.file_save_state = None
         self.text_saved_content = None
         self.valid = False
@@ -31,6 +33,8 @@ class StateRecord:
         self.append_string(self.text_source_path)
         self.append_string(self.file_open_folder)
         self.append_string(self.file_open_selected_filter)
+        self.append_int(self.text_depot_len)
+        self.append_int(self.text_depot_hash)
         return self.byte_dump
 
     def from_dump(self, byte_dump):
@@ -48,6 +52,8 @@ class StateRecord:
             self.text_source_path = self.retrieve_string()
             self.file_open_folder = self.retrieve_string()
             self.file_open_selected_filter = self.retrieve_string()
+            self.text_depot_len = self.retrieve_int()
+            self.text_depot_hash = self.retrieve_int()
         except IndexError:
             return
 

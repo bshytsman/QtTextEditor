@@ -1,7 +1,5 @@
 import os
 
-from PyQt5.QtWidgets import QMessageBox
-
 from text_editor.state.state_record import StateRecord
 from text_editor.util.file_utils import FileUtils
 
@@ -15,6 +13,7 @@ class StatePersistence:
         self.root_path = FileUtils.get_app_root_path()
         self.folder_state_name = self.root_path + "/" + StatePersistence.FOLDER_STATE_NAME
         self.file_state_path = self.folder_state_name + "/" + StatePersistence.FILE_STATE_NAME
+        self.file_depot_path = self.folder_state_name + "/" + StatePersistence.FILE_DEPOT_NAME
 
     def read_state(self):
         byte_list = None
@@ -35,12 +34,22 @@ class StatePersistence:
                 config.write(byte_list)
 
         except Exception as e:
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Information)
-            msg.setText("Error saving state:")
-            msg.setInformativeText(self.file_state_path)
-            msg.setWindowTitle("Saving state error")
-            msg.setDetailedText(str(e))
-            msg.setStandardButtons(QMessageBox.Ok)
-            msg.exec_()
+            FileUtils.display_error_dialog("Error saving state:", self.file_state_path, "Saving state error", str(e))
 
+    def read_depot(self):
+        text_depot = None
+        try:
+            with open(self.file_depot_path, 'tr') as depot:
+                text_depot = depot.read()
+        except IOError:
+            pass
+        return text_depot
+
+    def save_depot(self, text_depot):
+        try:
+            if not os.path.exists(self.folder_state_name):
+                os.makedirs(self.folder_state_name)
+            with open(self.file_depot_path, 'tw') as depot:
+                depot.write(text_depot)
+        except Exception as e:
+            FileUtils.display_error_dialog("Error saving save:", self.file_depot_path, "Saving state error", str(e))
