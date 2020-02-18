@@ -78,7 +78,8 @@ class StateMaster():
         if self.save_state_count > 0:
             self.save_state_count -= 1
             if self.save_state_count == 0:
-                self.state_persistence.save_state(self.app_state)
+                if not self.app_context.main_window.isMaximized():
+                    self.state_persistence.save_state(self.app_state)
 
         if self.rearrange_count > 0:
             self.rearrange_count -= 1
