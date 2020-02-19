@@ -2,7 +2,6 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow
 
 from text_editor.state.file_save_state import FileSaveState
-from text_editor.state.state_record import StateRecord
 from text_editor.ui.editor import Ui_MainWindow
 
 
@@ -27,22 +26,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.app_context.state_master.window_resized()
         resize_event.ignore()
 
-    def retrieve_window_state(self):
-        state = StateRecord()
+    def retrieve_window_state(self, state):
         geo = self.geometry()
         state.main_X = geo.x()
         state.main_Y = geo.y()
         state.main_Width = geo.width()
         state.main_Height = geo.height()
         state.valid = True
-        return state
 
     def apply_window_state(self, state):
         self.move(state.main_X, state.main_Y)
         self.resize(state.main_Width, state.main_Height)
         self.rearrange_components()
 
-    def display_file_name(self, app_state, is_changed = False):
+    def display_file_name(self, app_state, is_changed=False):
         file_name = "[new]"
         if app_state.file_save_state != FileSaveState.NEW:
             file_name = app_state.text_source_path
@@ -65,4 +62,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.plainTextEdit.move(side_gap, side_gap)
         self.plainTextEdit.resize(client_size.width() - side_gap * 2, y - side_gap * 2)
-

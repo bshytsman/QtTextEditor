@@ -1,0 +1,15 @@
+Shebang is the first ine of python file.It defines the interpreter's location.
+
+#!/usr/local/bin/python3
+
+
+Shebang makes the python file executable. Here is how to call executable python file:
+
+$ ./hello_exec/main.py
+$ hello_exec/main.py
+$ ./main.py
+
+
+If the '-bash: ./main.py: Permission denied' error occurs, use this:
+
+$ chmod +x main.py

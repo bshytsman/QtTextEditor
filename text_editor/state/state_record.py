@@ -24,6 +24,13 @@ class StateRecord:
             state.from_dump(byte_list)
         return state
 
+    def use_default_values(self):
+        self.text_source_path = ""
+        self.file_open_folder = ""
+        self.file_open_selected_filter = ""
+        self.text_depot_len = 0
+        self.text_depot_hash = 0
+
     def to_dump(self):
         self.byte_dump = bytearray()
         self.append_int(self.main_X)
