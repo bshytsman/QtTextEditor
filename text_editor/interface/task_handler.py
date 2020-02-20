@@ -1,5 +1,7 @@
 from text_editor.interaction.file_new_task import FileNewTask
 from text_editor.interaction.file_open_task import FileOpenTask
+from text_editor.interaction.file_save import FileSaveTask
+from text_editor.interaction.file_save_as_task import FileSaveAsTask
 
 
 class TaskHandler:
@@ -14,3 +16,11 @@ class TaskHandler:
     def file_new(self):
         task = FileNewTask(self.app_context)
         task.do_new()
+
+    def file_save(self):
+        task = FileSaveTask(self.app_context)
+        task.do_save()
+
+    def file_save_as(self):
+        task = FileSaveAsTask(self.app_context)
+        task.do_save_as()

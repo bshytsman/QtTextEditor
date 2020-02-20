@@ -10,9 +10,6 @@ class FileOpenTask:
 
     def __init__(self, app_context):
         self.app_context = app_context
-        self.filters = []
-        self.filters.append("Text Files (*.txt)")
-        self.filters.append("All Files (*)")
 
     def do_open(self):
         state_master = self.app_context.state_master
@@ -25,7 +22,7 @@ class FileOpenTask:
             parent=self.app_context.main_window,
             caption="",
             directory=app_state.file_open_folder,
-            filter=";;".join(self.filters),
+            filter=FileUtils.get_file_dialog_filters(),
             initialFilter=app_state.file_open_selected_filter,
             options=options)
 

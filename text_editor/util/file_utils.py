@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 class FileUtils:
     argument = 18
+    TEXT_EXTENSION = ".txt"
 
     @staticmethod
     def get_app_root_path():
@@ -21,3 +22,8 @@ class FileUtils:
         msg.setDetailedText(detailed)
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
+
+    @staticmethod
+    def get_file_dialog_filters():
+        filters = ["Text Files (*{})".format(FileUtils.TEXT_EXTENSION), "All Files (*)"]
+        return ";;".join(filters)

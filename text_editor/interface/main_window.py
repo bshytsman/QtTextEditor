@@ -14,6 +14,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def assign_signals(self):
         self.actionOpen.triggered.connect(self.app_context.task_handler.file_open)
         self.actionNew_file.triggered.connect(self.app_context.task_handler.file_new)
+        self.actionSave.triggered.connect(self.app_context.task_handler.file_save)
+        self.actionSave_As.triggered.connect(self.app_context.task_handler.file_save_as)
         self.plainTextEdit.textChanged.connect(self.app_context.state_master.text_changed)
         # self.pushButton.clicked.connect(self.app_context.test_worker.button_pressed)
         pass
