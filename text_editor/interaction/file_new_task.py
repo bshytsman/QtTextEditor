@@ -1,6 +1,5 @@
-import os
-
 from text_editor.state.file_save_state import FileSaveState
+from text_editor.util.file_utils import FileUtils
 
 
 class FileNewTask:
@@ -8,6 +7,14 @@ class FileNewTask:
         self.app_context = app_context
 
     def do_new(self):
+        state_master = self.app_context.state_master
+        if state_master.is_text_empty():
+            return
+
+        quit_flag = FileUtils.save_changes_dialog(self.app_context)
+        if quit_flag:
+            return
+
         self.app_context.active_editing = False
         state_master = self.app_context.state_master
         app_state = state_master.get_app_state()

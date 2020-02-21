@@ -12,6 +12,7 @@ class FileSaveAsTask:
     def do_save_as(self):
         state_master = self.app_context.state_master
         app_state = state_master.get_app_state()
+        flag_saved = False
 
         if app_state.file_save_state == FileSaveState.NEW:
             directory = app_state.file_open_folder
@@ -40,8 +41,11 @@ class FileSaveAsTask:
                 app_state.file_save_state = FileSaveState.SAVED
                 app_state.text_saved_content = text
                 self.app_context.main_window.display_file_name(app_state)
+                flag_saved = True
 
             except Exception as e:
                 FileUtils.display_error_dialog("File save error:", file_name, "File Save", str(e))
 
             state_master.save_app_state()
+
+        return flag_saved

@@ -19,8 +19,8 @@ class TaskHandler:
 
     def file_save(self):
         task = FileSaveTask(self.app_context)
-        task.do_save()
+        return task.do_save()
 
     def file_save_as(self):
         task = FileSaveAsTask(self.app_context)
-        task.do_save_as()
+        return task.do_save_as()

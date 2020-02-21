@@ -11,8 +11,9 @@ class FileSaveTask:
         state_master = self.app_context.state_master
         app_state = state_master.get_app_state()
         if app_state.file_save_state != FileSaveState.SAVED:
-            self.app_context.task_handler.file_save_as()
+            return self.app_context.task_handler.file_save_as()
         else:
+            flag_saved = False
             file_name = app_state.text_source_path
             try:
                 text = self.app_context.main_window.plainTextEdit.toPlainText()
@@ -21,6 +22,9 @@ class FileSaveTask:
 
                 app_state.text_saved_content = text
                 self.app_context.main_window.display_file_name(app_state)
+                flag_saved = True
 
             except Exception as e:
                 FileUtils.display_error_dialog("File save error:", file_name, "File Save", str(e))
+
+            return flag_saved

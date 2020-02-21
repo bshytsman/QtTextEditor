@@ -47,9 +47,13 @@ class StateMaster:
         if self.app_context.active_editing:
             self.save_depot_count = 20                  # will be auto-saved in 2 seconds
             if self.app_state.file_save_state != FileSaveState.NEW:
-                is_changed = self.app_state.text_saved_content != \
-                             self.main_window.plainTextEdit.toPlainText()
-                self.main_window.display_file_name(self.app_state, is_changed)
+                self.main_window.display_file_name(self.app_state, not self.is_text_saved())
+
+    def is_text_saved(self):
+        return self.app_state.text_saved_content == self.main_window.plainTextEdit.toPlainText()
+
+    def is_text_empty(self):
+        return self.main_window.plainTextEdit.toPlainText() == ""
 
     def load_app_state(self):
         self.app_state, text_depot = self.state_persistence.load_app_state()

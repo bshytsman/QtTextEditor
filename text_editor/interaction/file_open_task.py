@@ -12,6 +12,10 @@ class FileOpenTask:
         self.app_context = app_context
 
     def do_open(self):
+        quit_flag = FileUtils.save_changes_dialog(self.app_context)
+        if quit_flag:
+            return
+
         state_master = self.app_context.state_master
         app_state = state_master.get_app_state()
         success_flag = False
