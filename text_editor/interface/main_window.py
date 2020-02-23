@@ -16,8 +16,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionNew_file.triggered.connect(self.app_context.task_handler.file_new)
         self.actionSave.triggered.connect(self.app_context.task_handler.file_save)
         self.actionSave_As.triggered.connect(self.app_context.task_handler.file_save_as)
+        self.actionInfo.triggered.connect(self.app_context.task_handler.about_info)
         self.plainTextEdit.textChanged.connect(self.app_context.state_master.text_changed)
-        # self.pushButton.clicked.connect(self.app_context.test_worker.button_pressed)
+        self.pushButton.clicked.connect(self.app_context.task_handler.file_save)
         pass
 
     def moveEvent(self, move_event):

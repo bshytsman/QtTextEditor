@@ -122,6 +122,9 @@ QPushButton::pressed {
    <property name="text">
     <string>Info</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
   </action>
   <action name="actionOpen">
    <property name="text">

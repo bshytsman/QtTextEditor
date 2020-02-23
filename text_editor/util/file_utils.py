@@ -29,7 +29,7 @@ class FileUtils:
             return False
 
         msg = QMessageBox()
-        msg.setIcon(QMessageBox.Warning)
+        msg.setIcon(QMessageBox.Information)
         msg.setText("Do you want to save the changes you made?")
         msg.setInformativeText("Your changes will be lost if you don't save them.")
         msg.setWindowTitle("Save your changes?")

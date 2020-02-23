@@ -1,3 +1,4 @@
+from text_editor.interaction.about_info_task import AboutInfoTask
 from text_editor.interaction.file_new_task import FileNewTask
 from text_editor.interaction.file_open_task import FileOpenTask
 from text_editor.interaction.file_save import FileSaveTask
@@ -24,3 +25,7 @@ class TaskHandler:
     def file_save_as(self):
         task = FileSaveAsTask(self.app_context)
         return task.do_save_as()
+
+    def about_info(self):
+        task = AboutInfoTask(self.app_context)
+        return task.do_info()

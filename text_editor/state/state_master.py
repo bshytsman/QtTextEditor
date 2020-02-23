@@ -15,7 +15,7 @@ class StateMaster:
         self.main_window = app_context.main_window
         self.state_persistence = StatePersistence(FileUtils.get_app_root_path())
         self.app_state = None
-        self.job = TimerJob(interval=timedelta(milliseconds=StateMaster.WAIT_TIME_MILLISECONDS), execute=self.job_exec)
+        self.job = TimerJob(interval=timedelta(milliseconds=self.WAIT_TIME_MILLISECONDS), execute=self.job_exec)
         self.resize_signal = AppSignal()
         self.save_state_signal = AppSignal()
         self.save_depot_signal = AppSignal()
@@ -76,17 +76,20 @@ class StateMaster:
         text_depot = self.main_window.plainTextEdit.toPlainText()
         self.state_persistence.save_text_depot(self.app_state, text_depot)
 
+    def save_shape(self):
+        pos = self.main_window.pos()
+        self.app_state.main_X = pos.x()
+        self.app_state.main_Y = pos.y()
+        size = self.main_window.size()
+        self.app_state.main_Width = size.width()
+        self.app_state.main_Height = size.height()
+        self.save_state_count = 2
+
     def job_exec(self):
         if self.reshape_count > 0:
             self.reshape_count -= 1
             if self.reshape_count == 0 and (not self.main_window.isMaximized()):
-                pos = self.main_window.pos()
-                self.app_state.main_X = pos.x()
-                self.app_state.main_Y = pos.y()
-                size = self.main_window.size()
-                self.app_state.main_Width = size.width()
-                self.app_state.main_Height = size.height()
-                self.save_state_count = 2
+                self.save_shape()
 
         if self.resize_count > 0:
             self.resize_count -= 1
