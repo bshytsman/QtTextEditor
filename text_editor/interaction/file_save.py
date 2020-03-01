@@ -1,4 +1,4 @@
-from text_editor.state.file_save_state import FileSaveState
+from text_editor.state.source_file_state import SourceFileState
 from text_editor.util.file_utils import FileUtils
 
 
@@ -10,7 +10,7 @@ class FileSaveTask:
     def do_save(self):
         state_master = self.app_context.state_master
         app_state = state_master.get_app_state()
-        if app_state.file_save_state != FileSaveState.SAVED:
+        if app_state.file_save_state != SourceFileState.SAVED:
             return self.app_context.task_handler.file_save_as()
         else:
             flag_saved = False

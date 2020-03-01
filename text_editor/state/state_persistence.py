@@ -1,6 +1,6 @@
 import os
 
-from text_editor.state.file_save_state import FileSaveState
+from text_editor.state.source_file_state import SourceFileState
 from text_editor.state.state_record import StateRecord
 from text_editor.util.file_utils import FileUtils
 
@@ -32,9 +32,9 @@ class StatePersistence:
         app_state.text_saved_content = ""
 
         if file_name == "":
-            app_state.file_save_state = FileSaveState.NEW
+            app_state.file_save_state = SourceFileState.NEW
         else:
-            app_state.file_save_state = FileSaveState.NEVER_SAVED
+            app_state.file_save_state = SourceFileState.NEVER_SAVED
             try:
                 with open(file_name, 'tr') as src:
                     saved_content = src.read()

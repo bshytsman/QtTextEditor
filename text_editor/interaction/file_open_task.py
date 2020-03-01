@@ -2,7 +2,7 @@ import os
 
 from PyQt5.QtWidgets import QFileDialog
 
-from text_editor.state.file_save_state import FileSaveState
+from text_editor.state.source_file_state import SourceFileState
 from text_editor.util.file_utils import FileUtils
 
 
@@ -42,7 +42,7 @@ class FileOpenTask:
                 edit = self.app_context.main_window.plainTextEdit
                 edit.setPlainText(saved_content)
                 app_state.text_source_path = file_name
-                app_state.file_save_state = FileSaveState.NEVER_SAVED
+                app_state.file_save_state = SourceFileState.NEVER_SAVED
                 app_state.text_saved_content = saved_content
                 self.app_context.main_window.display_file_name(app_state)
                 self.app_context.active_editing = True

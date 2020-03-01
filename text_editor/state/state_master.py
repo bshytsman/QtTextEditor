@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from text_editor.core.app_signal import AppSignal
 from text_editor.core.timer_job import TimerJob
-from text_editor.state.file_save_state import FileSaveState
+from text_editor.state.source_file_state import SourceFileState
 from text_editor.state.state_persistence import StatePersistence
 from text_editor.util.file_utils import FileUtils
 
@@ -46,7 +46,7 @@ class StateMaster:
     def text_changed(self):
         if self.app_context.active_editing:
             self.save_depot_count = 20                  # will be auto-saved in 2 seconds
-            if self.app_state.file_save_state != FileSaveState.NEW:
+            if self.app_state.file_save_state != SourceFileState.NEW:
                 self.main_window.display_file_name(self.app_state, not self.is_text_saved())
 
     def is_text_saved(self):

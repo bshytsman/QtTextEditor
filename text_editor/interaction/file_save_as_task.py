@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QFileDialog
 
-from text_editor.state.file_save_state import FileSaveState
+from text_editor.state.source_file_state import SourceFileState
 from text_editor.util.file_utils import FileUtils
 
 
@@ -14,7 +14,7 @@ class FileSaveAsTask:
         app_state = state_master.get_app_state()
         flag_saved = False
 
-        if app_state.file_save_state == FileSaveState.NEW:
+        if app_state.file_save_state == SourceFileState.NEW:
             directory = app_state.file_open_folder
         else:
             directory = app_state.text_source_path
@@ -38,7 +38,7 @@ class FileSaveAsTask:
                     trg.write(text)
 
                 app_state.text_source_path = file_name
-                app_state.file_save_state = FileSaveState.SAVED
+                app_state.file_save_state = SourceFileState.SAVED
                 app_state.text_saved_content = text
                 self.app_context.main_window.display_file_name(app_state)
                 flag_saved = True

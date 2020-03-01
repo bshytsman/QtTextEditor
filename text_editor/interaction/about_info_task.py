@@ -16,7 +16,6 @@ class AboutInfoTask:
                             execute=self.timer_signal.emit)
         self.counter = 0
         self.counterMax = 0
-        print(self.counterMax)
 
     def do_info(self):
         self.locate_dialog_window()

@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow
 
-from text_editor.state.file_save_state import FileSaveState
+from text_editor.state.source_file_state import SourceFileState
 from text_editor.ui.editor import Ui_MainWindow
 
 
@@ -44,7 +44,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def display_file_name(self, app_state, is_changed=False):
         file_name = "[new]"
-        if app_state.file_save_state != FileSaveState.NEW:
+        if app_state.file_save_state != SourceFileState.NEW:
             file_name = app_state.text_source_path
             if is_changed:
                 file_name += "*"

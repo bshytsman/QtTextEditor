@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from text_editor.state.file_save_state import FileSaveState
+from text_editor.state.source_file_state import SourceFileState
 from text_editor.state.state_persistence import StatePersistence
 from text_editor.state.state_record import StateRecord
 
@@ -21,7 +21,7 @@ class StatePersistenceTester(unittest.TestCase):
         state, text_depot = self.state_persistence.load_app_state()
         self.assertEqual(state.valid, True)
         self.assertEqual(text_depot, self.saved_content)
-        self.assertEqual(state.file_save_state, FileSaveState.NEVER_SAVED)
+        self.assertEqual(state.file_save_state, SourceFileState.NEVER_SAVED)
 
     def test_read_valid_state_for_new_file(self):
         state, text = self.state_persistence.load_app_state()
@@ -31,7 +31,7 @@ class StatePersistenceTester(unittest.TestCase):
         state, text_depot = self.state_persistence.load_app_state()
         self.assertEqual(state.valid, True)
         self.assertEqual(text_depot, self.saved_content)
-        self.assertEqual(state.file_save_state, FileSaveState.NEW)
+        self.assertEqual(state.file_save_state, SourceFileState.NEW)
 
     def test_read_when_depot_is_not_equal_to_saved_content(self):
         state, text = self.state_persistence.load_app_state()
@@ -41,7 +41,7 @@ class StatePersistenceTester(unittest.TestCase):
         state, text = self.state_persistence.load_app_state()
         self.assertEqual(state.valid, True)
         self.assertEqual(text, updated_text)
-        self.assertEqual(state.file_save_state, FileSaveState.NEVER_SAVED)
+        self.assertEqual(state.file_save_state, SourceFileState.NEVER_SAVED)
 
     def test_read_when_state_file_is_missing(self):
         os.remove(self.state_persistence.file_state_path)
@@ -49,7 +49,7 @@ class StatePersistenceTester(unittest.TestCase):
         state, text_depot = self.state_persistence.load_app_state()
         self.assertEqual(state.valid, False)
         self.assertEqual(text_depot, "")
-        self.assertEqual(state.file_save_state, FileSaveState.NEW)
+        self.assertEqual(state.file_save_state, SourceFileState.NEW)
 
     def test_read_when_state_len_doesnt_match(self):
         state, text = self.state_persistence.load_app_state()
@@ -63,7 +63,7 @@ class StatePersistenceTester(unittest.TestCase):
         state, text = self.state_persistence.load_app_state()
         self.assertEqual(state.valid, True)
         self.assertEqual(text, self.saved_content)
-        self.assertEqual(state.file_save_state, FileSaveState.NEVER_SAVED)
+        self.assertEqual(state.file_save_state, SourceFileState.NEVER_SAVED)
 
     def test_read_when_state_hash_doesnt_match(self):
         state, text = self.state_persistence.load_app_state()
@@ -78,7 +78,7 @@ class StatePersistenceTester(unittest.TestCase):
         self.assertEqual(state.valid, True)
         self.assertNotEqual(text, updated_text)
         self.assertEqual(text, self.saved_content)
-        self.assertEqual(state.file_save_state, FileSaveState.NEVER_SAVED)
+        self.assertEqual(state.file_save_state, SourceFileState.NEVER_SAVED)
 
     def test_read_when_depot_file_is_missing(self):
         os.remove(self.state_persistence.file_depot_path)
@@ -86,7 +86,7 @@ class StatePersistenceTester(unittest.TestCase):
         state, text_depot = self.state_persistence.load_app_state()
         self.assertEqual(state.valid, True)
         self.assertEqual(text_depot, self.saved_content)
-        self.assertEqual(state.file_save_state, FileSaveState.NEVER_SAVED)
+        self.assertEqual(state.file_save_state, SourceFileState.NEVER_SAVED)
 
     def test_read_when_source_file_is_missing(self):
         state, text_depot = self.state_persistence.load_app_state()
@@ -96,7 +96,7 @@ class StatePersistenceTester(unittest.TestCase):
         state, text_depot = self.state_persistence.load_app_state()
         self.assertEqual(state.valid, True)
         self.assertEqual(text_depot, self.saved_content)
-        self.assertEqual(state.file_save_state, FileSaveState.NEVER_SAVED)
+        self.assertEqual(state.file_save_state, SourceFileState.NEVER_SAVED)
 
     def test_read_when_depot_and_source_file_are_missing(self):
         state, text_depot = self.state_persistence.load_app_state()
@@ -108,7 +108,7 @@ class StatePersistenceTester(unittest.TestCase):
         state, text_depot = self.state_persistence.load_app_state()
         self.assertEqual(state.valid, True)
         self.assertEqual(text_depot, "")
-        self.assertEqual(state.file_save_state, FileSaveState.NEVER_SAVED)
+        self.assertEqual(state.file_save_state, SourceFileState.NEVER_SAVED)
 
     def get_test_root_path(self):
         parts = os.path.realpath(__file__).split("/")[:-1]
